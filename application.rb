@@ -14,6 +14,11 @@ module Travis
         set :show_exceptions, false
       end
 
+      get "/style" do
+        headers 'Content-Type' => 'text/css; charset=utf-8'
+        sass :style
+      end
+
       get "/" do
         haml :index
       end
