@@ -1,2 +1,2 @@
 require File.expand_path("application")
-run LintApp::Application
+run Travis::WebLint::Application
