@@ -9,6 +9,11 @@ module Travis
 
       register Sinatra::RespondTo
 
+      configure :production do
+        set :raise_errors, false
+        set :show_exceptions, false
+      end
+
       get "/" do
         haml :index
       end
@@ -25,6 +30,11 @@ module Travis
           wants.html { haml :result }
           wants.json { @result.to_json }
         end
+      end
+
+      error do
+        @error = env["sinatra.error"]
+        haml :error
       end
 
     end
