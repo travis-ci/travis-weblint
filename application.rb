@@ -23,12 +23,17 @@ module Travis
       end
 
       post "/" do
-        redirect to("/#{params['repo']}")
+        if params['repo']
+          redirect to("/#{params['repo']}")
+        elsif params['yml']
+          @result = Validator.validate_yml(params['yml'])
+          haml :result
+        end
       end
 
       get "/*" do
         repo = params["splat"].first
-        @result = Validator.validate(repo)
+        @result = Validator.validate_repo(repo)
 
         respond_to do |wants|
           wants.html { haml :result }

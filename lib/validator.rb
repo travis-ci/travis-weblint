@@ -15,24 +15,28 @@ module Travis
       SHA_URI = "http://github.com/api/v2/json/commits/list/%s/master"
       BLOB_URI = "http://github.com/api/v2/json/blob/show/%s/%s/.travis.yml"
 
-      def validate(project)
-        sha = get_sha(project)
-        travis_blob = get_blob(project, sha)
-        lint yaml_load(travis_blob)
+      def validate_repo(repo)
+        sha = get_sha(repo)
+        travis_blob = get_blob(repo, sha)
+        validate_yml(travis_blob)
+      end
+
+      def validate_yml(yml)
+        lint yaml_load(yml)
       end
 
     private
 
-      def get_sha(project)
-        response = http_get(SHA_URI, project).body
+      def get_sha(repo)
+        response = http_get(SHA_URI, repo).body
         result = json_parse(response)
 
         raise GithubError, result["error"] if result["error"]
         result["commits"].first["tree"]
       end
 
-      def get_blob(project, sha)
-        response = http_get(BLOB_URI, project, sha).body
+      def get_blob(repo, sha)
+        response = http_get(BLOB_URI, repo, sha).body
         result = json_parse(response)
         result["blob"]["data"]
       end
