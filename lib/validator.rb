@@ -23,21 +23,25 @@ module Travis
     private
 
       def get_sha(repo)
-        response = http_get(SHA_URI, repo).body
-        result = json_parse(response)
-
-        raise GithubError, result["error"] if result["error"]
+        result = github_request(SHA_URI % repo)
         result["commits"].first["tree"]
       end
 
       def get_blob(repo, sha)
-        response = http_get(BLOB_URI, repo, sha).body
-        result = json_parse(response)
+        result = github_request(BLOB_URI % [repo, sha])
         result["blob"]["data"]
       end
 
-      def http_get(uri, *args)
-        Net::HTTP.get_response URI(uri % args)
+      def github_request(url)
+        response = http_get(url).body
+        result = json_parse(response)
+
+        raise GithubError, result["error"] if result["error"]
+        result
+      end
+
+      def http_get(url)
+        Net::HTTP.get_response URI(url)
       rescue SocketError
         raise HTTPError
       end
