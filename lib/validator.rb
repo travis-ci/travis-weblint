@@ -17,7 +17,8 @@ module Travis
       end
 
       def validate_yml(yml)
-        lint yaml_load(yml)
+        travis_yml = yaml_load(yml)
+        validate lint(travis_yml)
       end
 
     private
@@ -58,11 +59,16 @@ module Travis
         raise YAMLError
       end
 
-      def lint(travis_yml)
-        issues = Lint::Linter.validate(travis_yml)
-
+      def validate(issues)
         return Result.new(:invalid, issues) unless issues.empty?
         Result.new(:valid)
+      end
+
+      def lint(travis_yml)
+        Lint::Linter.validate(travis_yml)
+      rescue NoMethodError => e
+        puts "LINT-ERROR #{e}"
+        raise LintError
       end
 
     end

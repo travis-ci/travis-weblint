@@ -6,5 +6,7 @@
   %p We were unable to parse Github's JSON response
 - elsif @error.type?(:yaml)
   %p We were unable to parse your .travis.yml
+- elsif @error.type?(:lint)
+  %p Lint was unable to validate your .travis.yml
 - elsif @error.type?(:github)
   %p Github says: #{@error}
