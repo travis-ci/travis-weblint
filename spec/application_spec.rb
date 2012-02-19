@@ -10,7 +10,7 @@ describe Travis::WebLint::Application do
     Travis::WebLint::Application
   end
 
-  describe "/" do
+  describe "GET /" do
     before do
       get "/"
     end
@@ -28,7 +28,25 @@ describe Travis::WebLint::Application do
     end
   end
 
-  describe "/*" do
+  describe "POST /" do
+    it "redirects to validate a given repo" do
+      post "/", "repo" => "travis-ci/travis-ci"
+
+      last_response.should be_redirect
+      follow_redirect!
+      last_request.url.should == "http://example.org/travis-ci/travis-ci"
+    end
+
+    it "validates a given .travis.yml" do
+      travis_yml = "language: ruby\nrvm:\n  - 1.9.3"
+      validator.expects(:validate_yml).with(travis_yml).returns(result(:valid))
+
+      post "/", "yml" => travis_yml
+      last_response.body.should include("Hooray")
+    end
+  end
+
+  describe "GET /*" do
     context "with a valid .travis.yml" do
       it "let's you know that your config is valid" do
         validator.stubs(:validate_repo).returns(result(:valid))

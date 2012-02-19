@@ -21,10 +21,10 @@ module Travis
       end
 
       post "/" do
-        if params['repo']
+        if params["repo"]
           redirect to("/#{params['repo']}")
-        elsif params['yml']
-          @result = Validator.validate_yml(params['yml'])
+        elsif params["yml"]
+          @result = Validator.validate_yml(params["yml"])
           haml :result
         end
       end
