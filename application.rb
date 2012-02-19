@@ -7,14 +7,12 @@ module Travis
   module WebLint
     class Application < Sinatra::Base
 
-      register Sinatra::RespondTo
-
       configure :production do
         set :raise_errors, false
         set :show_exceptions, false
       end
 
-      get "/style" do
+      get "/style.css" do
         sass :style
       end
 
@@ -35,10 +33,7 @@ module Travis
         repo = params["splat"].first
         @result = Validator.validate_repo(repo)
 
-        respond_to do |wants|
-          wants.html { haml :result }
-          wants.json { @result.to_json }
-        end
+        haml :result
       end
 
       error do
