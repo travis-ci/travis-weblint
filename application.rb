@@ -8,8 +8,11 @@ module Travis
     class Application < Sinatra::Base
 
       configure :production do
-        set :raise_errors, false
-        set :show_exceptions, false
+        disable :raise_errors
+        disable :show_exceptions
+
+        set :haml, :ugly => true
+        set :sass, :style => :compressed
       end
 
       get "/style.css" do
