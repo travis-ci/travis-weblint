@@ -62,7 +62,7 @@ module Travis
       def lint(travis_yml)
         issues = Lint::Linter.validate(travis_yml)
 
-        return Result.new(:issues, issues) unless issues.empty?
+        return Result.new(:invalid, issues) unless issues.empty?
         Result.new(:valid)
       end
 

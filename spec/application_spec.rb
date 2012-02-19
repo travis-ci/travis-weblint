@@ -41,7 +41,7 @@ describe Travis::WebLint::Application do
     context "with an invalid .travis.yml" do
       it "displays the validation errors" do
         issues = [{ :key=> :language, :issue => 'The "language" key is mandatory' }]
-        validator.stubs(:validate_repo).returns(result(:issues, issues))
+        validator.stubs(:validate_repo).returns(result(:invalid, issues))
 
         get "/travis-ci/travis-ci"
         last_response.body.should include('The "language" key is mandatory')
