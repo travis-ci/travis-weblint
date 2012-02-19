@@ -11,5 +11,6 @@ gem "haml",               "~> 3.1"
 
 group :test do
   gem "rspec",            "~> 2.8"
+  gem "mocha",            "~> 0.10"
   gem "rack-test",        "~> 0.6", :require => "rack/test"
 end

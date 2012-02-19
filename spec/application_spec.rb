@@ -28,4 +28,47 @@ describe Travis::WebLint::Application do
     end
   end
 
+  describe "/*" do
+    context "with a valid .travis.yml" do
+      it "let's you know that your config is valid" do
+        validator.stubs(:validate_repo).returns(result(:valid))
+
+        get "/travis-ci/travis-ci"
+        last_response.body.should include("Hooray")
+      end
+    end
+
+    context "with an invalid .travis.yml" do
+      it "displays the validation errors" do
+        issues = [{ :key=> :language, :issue => 'The "language" key is mandatory' }]
+        validator.stubs(:validate_repo).returns(result(:issues, issues))
+
+        get "/travis-ci/travis-ci"
+        last_response.body.should include('The "language" key is mandatory')
+      end
+    end
+
+    it "works for regular repo names" do
+      validator.expects(:validate_repo).with("travis-ci/travis-ci").returns(result(:valid))
+
+      get "/travis-ci/travis-ci"
+      last_response.should be_ok
+    end
+
+    it "works for repo names including a dot" do
+      validator.expects(:validate_repo).with("koraktor/braumeister.org").returns(result(:valid))
+
+      get "/koraktor/braumeister.org"
+      last_response.should be_ok
+    end
+  end
+
+  def validator
+    Travis::WebLint::Validator
+  end
+
+  def result(*args)
+    Travis::WebLint::Result.new(*args)
+  end
+
 end
