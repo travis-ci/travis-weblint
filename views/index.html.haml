@@ -1,4 +1,9 @@
-%form(action="/" method="post" accept-charset="UTF-8")
-  %label(for="repo") Github Repository
+%form(class="first" action="/" method="post" accept-charset="UTF-8")
+  %label(for="repo") Enter your Github repository
   %input(type="text" id="repo" name="repo" maxlength="80" placeholder="travis-ci/travis-ci")
+  %input(type="submit" value="Validate")
+
+%form(action="/" method="post" accept-charset="UTF-8")
+  %label(for="yml") Or paste your .travis.yml
+  %textarea(id="yml" name="yml" maxlength="500")
   %input(type="submit" value="Validate")

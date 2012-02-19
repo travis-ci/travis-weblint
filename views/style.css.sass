@@ -1,34 +1,142 @@
-html
+// http://meyerweb.com/eric/tools/css/reset/
+// v2.0 | 20110126
+// License: none (public domain)
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video
   margin: 0
   padding: 0
+  border: 0
+  font-size: 100%
+  font: inherit
+  vertical-align: baseline
+
+// HTML5 display-role reset for older browsers
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section
+  display: block
 
 body
-  font: 14px/22px 'Helvetica Neue', Helvetica, Arial, sans-serif
-  color: #666
-  margin: 50px auto
-  padding: 0
-  width: 800px
+  line-height: 1
 
-h1
-  background: url(../images/travis-ci.png) 0 0 no-repeat
-  color: #333
-  height: 64px
+ol, ul
+  list-style: none
 
-  b
-    display: block
-    text-indent: -9000px
+blockquote, q
+  quotes: none
 
-  i
-    font-size: 34px
-    font-weight: bold
-    font-style: normal
-    display: block
-    margin-left: 68px
+blockquote
+  &:before, &:after
+    content: ''
+    content: none
 
-a:link, a:visited
-  color: #666
+q
+  &:before, &:after
+    content: ''
+    content: none
+
+table
+  border-collapse: collapse
+  border-spacing: 0
+
+// General
+
+body
+  margin: 2em auto 2em auto
+  width: 960px
+  font-size: 14px
+  line-height: 1.4286
+  color: #555
+  background: #fff
+  font-family: "Helvetica Neue", Arial, Verdana, sans-serif
+
+b
+  font-weight: bold
+
+a
+  color: #36c
+  outline: none
   text-decoration: underline
 
-a:hover, a:active
+a:visited
   color: #666
+
+a:hover
+  color: #6c3
   text-decoration: none
+
+h1
+  color: #000
+  font-size: 4em
+  font-weight: bold
+  line-height: 1em
+
+h1 a:link, h1 a:visited, h1 a:hover, h1 a:active
+  color: #000
+  text-decoration: none
+
+h2
+  font-size: 2em
+  font-weight: bold
+  line-height: 2em
+
+p.tagline
+  color: #777
+  display: block
+  font: italic 1.25em Georgia, Times, Serif
+  line-height: 1.67em
+  margin: 1em 0 4em 0
+  padding: 0 0 1.25em 0
+  border-bottom: 1px solid #ccc
+
+// Result
+
+p.result
+  font-size: 1.5em
+  color: #6c3
+
+ul.result
+  list-style: disc outside
+
+ul.result li
+  margin-bottom: 2em
+
+
+// Form
+
+form
+  display: inline-block
+  vertical-align: top
+  width: 450px
+
+form.left
+  margin-right: 55px
+
+label, input
+  display: block
+
+label
+  margin-bottom: 0.5em
+
+input, textarea
+  font-size: 14px
+  line-height: 1.4286
+  color: #555
+  font-family: "Helvetica Neue", Arial, Verdana, sans-serif
+  border: 1px solid #ccc
+  margin: 0
+
+input[type=text]
+  padding: 4px 8px
+  width: 400px
+
+input[type=submit]
+  background: #efefef
+  padding: 4px 8px
+  margin-top: 0.5em
+
+input[type=submit]:hover
+  cursor: pointer
+
+textarea
+  padding: 4px 8px
+  width: 430px
+  height: 250px

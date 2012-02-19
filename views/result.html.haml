@@ -1,8 +1,11 @@
 - if @result.valid?
-  %p Hooray, your .travis.yml seems to be solid!
+  %p.result Hooray, your .travis.yml seems to be solid!
 - else
-  %ul
+  %ul.result
     - @result.issues.each do |issue|
       %li
-        %h3 Found an issue with the `#{issue[:key]}` key
+        %p
+          Found an issue with the
+          %b #{issue[:key]}
+          key:
         %p= issue[:issue]
