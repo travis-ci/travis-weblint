@@ -5,7 +5,6 @@ Travis WebLint uses [travis-lint](https://github.com/travis-ci/travis-lint) to c
 
 ## TODO
 
-* Improved error handling
 * Let people add a SHA and/or branch to validate
 
 
