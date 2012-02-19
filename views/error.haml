@@ -1,2 +1,10 @@
-%h2 Something went wrong
-%p This could need some better error handling
+%h2 OMG, something went wrong
+
+- if @error.type?(:http)
+  %p Looks like some kind of HTTP error
+- elsif @error.type?(:json)
+  %p We were unable to parse Github's JSON response
+- elsif @error.type?(:yaml)
+  %p We were unable to parse your .travis.yml
+- elsif @error.type?(:github)
+  %p Github says: #{@error}

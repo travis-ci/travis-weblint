@@ -1,16 +1,11 @@
 require "net/http"
 require File.expand_path("lib/result")
+require File.expand_path("lib/errors")
 
 module Travis
   module WebLint
     module Validator
       extend self
-
-      class Error < StandardError; end
-      class HTTPError < Error; end
-      class JSONError < Error; end
-      class YAMLError < Error; end
-      class GithubError < Error; end
 
       SHA_URI = "http://github.com/api/v2/json/commits/list/%s/master"
       BLOB_URI = "http://github.com/api/v2/json/blob/show/%s/%s/.travis.yml"
