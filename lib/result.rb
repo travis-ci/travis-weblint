@@ -12,7 +12,7 @@ module Travis
       attr_reader :type
 
       def type=(type)
-        raise ArgumentError unless TYPES.include?(type)
+        raise ArgumentError, "Invalid result type" unless TYPES.include?(type)
         @type = type
       end
 

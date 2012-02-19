@@ -2,6 +2,11 @@ require "spec_helper"
 
 describe Travis::WebLint::Result do
 
+  it "raises when instantiated with an invalid type" do
+    expect { Travis::WebLint::Result.new(:whatever) }.
+      to raise_error(ArgumentError, "Invalid result type")
+  end
+
   describe "a valid result" do
     subject do
       Travis::WebLint::Result.new(:valid)
