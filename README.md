@@ -1,4 +1,4 @@
-# About Travis WebLint
+# About Travis WebLint [![Build Status](https://secure.travis-ci.org/travis-ci/travis-weblint.png)](http://travis-ci.org/travis-ci/travis-weblint)
 
 Travis WebLint uses [travis-lint](https://github.com/travis-ci/travis-lint) to check your `.travis.yml` for you.
 
