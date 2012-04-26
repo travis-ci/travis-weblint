@@ -1,6 +1,10 @@
 %form(class="first" action="/" method="post" accept-charset="UTF-8")
   %label(for="repo") Enter your Github repository
   %input(type="text" id="repo" name="repo" maxlength="80" placeholder="travis-ci/travis-ci")
+  %label(for="sha") Enter the commit SHA (optional)
+  %input(type="text" id="sha" name="sha" maxlength="80" placeholder="b7fbb8b3479f118c1682271014503b1255a8ba02")
+  %label(for="branch") Enter the branch (optional)
+  %input(type="text" id="branch" name="branch" maxlength="80" placeholder="production")
   %input(type="submit" value="Validate")
 
 %form(action="/" method="post" accept-charset="UTF-8")

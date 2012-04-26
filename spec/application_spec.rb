@@ -23,6 +23,14 @@ describe Travis::WebLint::Application do
       last_response.body.should =~ /<input.*name='repo'.*?\/>/
     end
 
+    it "contains a 'sha' input field" do
+      last_response.body.should =~ /<input.*name='sha'.*?\/>/
+    end
+
+    it "contains a 'branch' input field" do
+      last_response.body.should =~ /<input.*name='branch'.*?\/>/
+    end
+
     it "contains a 'yml' textarea" do
       last_response.body.should =~ /<textarea.*name='yml'.*?>/
     end
