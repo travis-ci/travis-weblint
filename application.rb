@@ -25,7 +25,13 @@ module Travis
 
       post "/" do
         if params["repo"]
-          redirect to("/#{params['repo']}")
+          if params["sha"]
+            redirect to("/#{params['repo']}/commit/#{params["sha"]}")
+          elsif params["branch"]
+            redirect to("/#{params['repo']}/tree/#{params["branch"]}")
+          else
+            redirect to("/#{params['repo']}")
+          end
         elsif params["yml"]
           @result = Validator.validate_yml(params["yml"])
           haml :result
@@ -33,8 +39,12 @@ module Travis
       end
 
       get "/*" do
-        repo = params["splat"].first
-        @result = Validator.validate_repo(repo)
+        parts = params["splat"].first.split("/")
+        repo = parts[0..1].join("/")
+        options = {}
+        options[:sha] = parts[3] if parts[2] == "commit"
+        options[:branch] = parts[3] if parts[2] == "tree"
+        @result = Validator.validate_repo(repo, options)
 
         haml :result
       end
