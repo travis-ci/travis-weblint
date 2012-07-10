@@ -1,4 +1,6 @@
-require "net/http"
+require "net/https"
+require "base64"
+
 require File.expand_path("lib/result")
 require File.expand_path("lib/errors")
 
@@ -7,8 +9,11 @@ module Travis
     module Validator
       extend self
 
-      SHA_URI = "http://github.com/api/v2/json/commits/list/%s/master"
-      BLOB_URI = "http://github.com/api/v2/json/blob/show/%s/%s/.travis.yml"
+      API_HOST = 'api.github.com'
+      API_PORT = 443
+
+      SHA_PATH  = "/repos/%s/commits"
+      BLOB_PATH = "/repos/%s/contents/.travis.yml?sha=%s"
 
       def validate_repo(repo)
         sha = get_sha(repo)
@@ -24,27 +29,28 @@ module Travis
     private
 
       def get_sha(repo)
-        result = github_request(SHA_URI % repo)
-        result["commits"].first["tree"]
+        github_request(SHA_PATH % repo).first["sha"]
       end
 
       def get_blob(repo, sha)
-        result = github_request(BLOB_URI % [repo, sha])
-        result["blob"]["data"]
+        Base64.decode64(github_request(BLOB_PATH % [repo, sha])["content"])
       end
 
-      def github_request(url)
-        response = http_get(url).body
-        result = json_parse(response)
-
-        raise GithubError, result["error"] if result["error"]
-        result
+      def github_request(path)
+        json_parse(https_get(path).body)
       end
 
-      def http_get(url)
-        Net::HTTP.get_response URI(url)
-      rescue SocketError
-        raise HTTPError
+      def https_get(path)
+        https = Net::HTTP.new(API_HOST, API_PORT)
+        https.use_ssl = true
+
+        response = https.get(path)
+
+        if response.is_a?(Net::HTTPOK)
+          response
+        else
+          raise HTTPError
+        end
       end
 
       def json_parse(string)

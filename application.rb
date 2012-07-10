@@ -15,11 +15,6 @@ module Travis
         set :sass, :style => :compressed
       end
 
-      before do
-        puts "PATH_INFO #{request.path_info.inspect}"
-        puts "PARAMS #{request.params.inspect}"
-      end
-
       get "/style.css" do
         sass :style
       end
