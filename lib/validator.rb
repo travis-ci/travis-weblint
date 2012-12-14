@@ -15,8 +15,8 @@ module Travis
       SHA_PATH  = "/repos/%s/commits"
       BLOB_PATH = "/repos/%s/contents/.travis.yml?sha=%s"
 
-      def validate_repo(repo)
-        sha = get_sha(repo)
+      def validate_repo(repo, options = {})
+        sha = options[:sha] || get_sha(repo, options[:branch] || "master")
         travis_blob = get_blob(repo, sha)
         validate_yml(travis_blob)
       end
@@ -28,8 +28,9 @@ module Travis
 
     private
 
-      def get_sha(repo)
-        github_request(SHA_PATH % repo).first["sha"]
+      def get_sha(repo, branch)
+        result = github_request(SHA_PATH % [repo, branch])
+        result.first["sha"]
       end
 
       def get_blob(repo, sha)

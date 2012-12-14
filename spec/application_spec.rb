@@ -23,6 +23,14 @@ describe Travis::WebLint::Application do
       last_response.body.should =~ /<input.*name='repo'.*?\/>/
     end
 
+    it "contains a 'sha' input field" do
+      last_response.body.should =~ /<input.*name='sha'.*?\/>/
+    end
+
+    it "contains a 'branch' input field" do
+      last_response.body.should =~ /<input.*name='branch'.*?\/>/
+    end
+
     it "contains a 'yml' textarea" do
       last_response.body.should =~ /<textarea.*name='yml'.*?>/
     end
@@ -35,6 +43,22 @@ describe Travis::WebLint::Application do
       last_response.should be_redirect
       follow_redirect!
       last_request.url.should == "http://example.org/travis-ci/travis-ci"
+    end
+
+    it "redirects to validate a given repo with SHA" do
+      post "/", "repo" => "travis-ci/travis-ci", "sha" => "b7fbb8b3479f118c1682271014503b1255a8ba02"
+
+      last_response.should be_redirect
+      follow_redirect!
+      last_request.url.should == "http://example.org/travis-ci/travis-ci/commit/b7fbb8b3479f118c1682271014503b1255a8ba02"
+    end
+
+    it "redirects to validate a given repo with branch" do
+      post "/", "repo" => "travis-ci/travis-ci", "branch" => "production"
+
+      last_response.should be_redirect
+      follow_redirect!
+      last_request.url.should == "http://example.org/travis-ci/travis-ci/tree/production"
     end
 
     it "validates a given .travis.yml" do
@@ -67,14 +91,28 @@ describe Travis::WebLint::Application do
     end
 
     it "works for regular repo names" do
-      validator.expects(:validate_repo).with("travis-ci/travis-ci").returns(result(:valid))
+      validator.expects(:validate_repo).with("travis-ci/travis-ci", {}).returns(result(:valid))
 
       get "/travis-ci/travis-ci"
       last_response.should be_ok
     end
 
+    it "works for regular repo name and SHA" do
+      validator.expects(:validate_repo).with("travis-ci/travis-ci", {:sha => "b7fbb8b3479f118c1682271014503b1255a8ba02"}).returns(result(:valid))
+
+      get "/travis-ci/travis-ci/commit/b7fbb8b3479f118c1682271014503b1255a8ba02"
+      last_response.should be_ok
+    end
+
+    it "works for regular repo name and branch" do
+      validator.expects(:validate_repo).with("travis-ci/travis-ci", {:branch => "production"}).returns(result(:valid))
+
+      get "/travis-ci/travis-ci/tree/production"
+      last_response.should be_ok
+    end
+
     it "works for repo names including a dot" do
-      validator.expects(:validate_repo).with("koraktor/braumeister.org").returns(result(:valid))
+      validator.expects(:validate_repo).with("koraktor/braumeister.org", {}).returns(result(:valid))
 
       get "/koraktor/braumeister.org"
       last_response.should be_ok
