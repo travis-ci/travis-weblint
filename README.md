@@ -12,6 +12,6 @@ Travis WebLint can be found at <http://lint.travis-ci.org>
 
 ## License & Copyright
 
-Copyright 2012 (c) Travis CI Development Team.
+Copyright 2012-2013 (c) Travis CI Development Team.
 
 Released under the MIT license.
