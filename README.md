@@ -2,9 +2,9 @@
 
 Travis WebLint uses [travis-lint](https://github.com/travis-ci/travis-lint) to check your `.travis.yml` for you.
 
-## How To Use
+## Usage
 
-You can find it here: [travis-lint](http://lint.travis-ci.org/)
+Travis WebLint can be found at <http://lint.travis-ci.org>
 
 ## TODO
 
