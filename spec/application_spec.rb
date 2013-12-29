@@ -33,8 +33,14 @@ describe Travis::WebLint::Application do
       post "/", "repo" => "travis-ci/travis-ci"
 
       last_response.should be_redirect
-      follow_redirect!
-      last_request.url.should == "http://example.org/travis-ci/travis-ci"
+      last_response.location.should == "http://example.org/travis-ci/travis-ci/"
+    end
+
+    it "redirects to validate a given repo and branch" do
+      post "/", "repo" => "travis-ci/travis-ci", "sha" => "master"
+
+      last_response.should be_redirect
+      last_response.location.should == "http://example.org/travis-ci/travis-ci/master"
     end
 
     it "validates a given .travis.yml" do
@@ -48,10 +54,17 @@ describe Travis::WebLint::Application do
 
   describe "GET /*" do
     context "with a valid .travis.yml" do
-      it "let's you know that your config is valid" do
+      it "lets you know that your config is valid" do
         validator.stubs(:validate_repo).returns(result(:valid))
 
         get "/travis-ci/travis-ci"
+        last_response.body.should include("Hooray")
+      end
+
+      it "lets you know that your config is valid for a given branch" do
+        validator.stubs(:validate_repo).returns(result(:valid))
+
+        get "/travis-ci/travis-ci/foo"
         last_response.body.should include("Hooray")
       end
     end
@@ -64,17 +77,25 @@ describe Travis::WebLint::Application do
         get "/travis-ci/travis-ci"
         last_response.body.should include('The "language" key is mandatory')
       end
+
+      it "displays the validation errors for a given branch" do
+        issues = [{ :key => :language, :issue => 'The "language" key is mandatory' }]
+        validator.stubs(:validate_repo).returns(result(:invalid, issues))
+
+        get "/travis-ci/travis-ci/foo"
+        last_response.body.should include('The "language" key is mandatory')
+      end
     end
 
     it "works for regular repo names" do
-      validator.expects(:validate_repo).with("travis-ci/travis-ci").returns(result(:valid))
+      validator.expects(:validate_repo).with("travis-ci/travis-ci", "master").returns(result(:valid))
 
       get "/travis-ci/travis-ci"
       last_response.should be_ok
     end
 
     it "works for repo names including a dot" do
-      validator.expects(:validate_repo).with("koraktor/braumeister.org").returns(result(:valid))
+      validator.expects(:validate_repo).with("koraktor/braumeister.org", "master").returns(result(:valid))
 
       get "/koraktor/braumeister.org"
       last_response.should be_ok
