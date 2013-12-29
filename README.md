@@ -6,10 +6,6 @@ Travis WebLint uses [travis-lint](https://github.com/travis-ci/travis-lint) to c
 
 Travis WebLint can be found at <http://lint.travis-ci.org>
 
-## TODO
-
-* Let people add a SHA and/or branch to validate
-
 ## License & Copyright
 
 Copyright 2011-2013 (c) Travis CI Development Team.
