@@ -12,11 +12,9 @@ module Travis
       API_HOST = 'api.github.com'
       API_PORT = 443
 
-      SHA_PATH  = "/repos/%s/commits"
-      BLOB_PATH = "/repos/%s/contents/.travis.yml?sha=%s"
+      BLOB_PATH = "/repos/%s/contents/.travis.yml?ref=%s"
 
-      def validate_repo(repo)
-        sha = get_sha(repo)
+      def validate_repo(repo, sha)
         travis_blob = get_blob(repo, sha)
         validate_yml(travis_blob)
       end
@@ -27,10 +25,6 @@ module Travis
       end
 
     private
-
-      def get_sha(repo)
-        github_request(SHA_PATH % repo).first["sha"]
-      end
 
       def get_blob(repo, sha)
         Base64.decode64(github_request(BLOB_PATH % [repo, sha])["content"])

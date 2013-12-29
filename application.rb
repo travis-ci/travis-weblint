@@ -25,16 +25,24 @@ module Travis
 
       post "/" do
         if params["repo"]
-          redirect to("/#{params['repo']}")
+          redirect to("/#{params['repo']}/#{params['sha']}")
         elsif params["yml"]
           @result = Validator.validate_yml(params["yml"])
           haml :result
         end
       end
 
+      get "/:user/:repo/:sha?" do
+        repo = "#{params['user']}/#{params['repo']}"
+        sha = params["sha"] || "master"
+        @result = Validator.validate_repo(repo, sha)
+
+        haml :result
+      end
+
       get "/*" do
         repo = params["splat"].first
-        @result = Validator.validate_repo(repo)
+        @result = Validator.validate_repo(repo, "master")
 
         haml :result
       end

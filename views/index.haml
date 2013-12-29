@@ -1,6 +1,8 @@
 %form(class="first" action="/" method="post" accept-charset="UTF-8")
   %label(for="repo") Enter your Github repository
-  %input(type="text" id="repo" name="repo" maxlength="80" placeholder="travis-ci/travis-ci")
+  %input(type="text" id="repo" name="repo" maxlength="80" placeholder="travis-ci/travis-weblint")
+  %label(for="repo") Enter the branch (or SHA1 ref) to validate
+  %input(type="text" id="sha" name="sha" maxlength="80" value="master")
   %input(type="submit" value="Validate")
 
 %form(action="/" method="post" accept-charset="UTF-8")
