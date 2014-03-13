@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem "rake",               "~> 0.9"
 
 gem "sinatra",            "~> 1.3", :require => "sinatra/base"
-gem "travis-lint",        "1.7.0",  :require => "travis/lint"
+gem "travis-lint",        :git => 'https://github.com/travis-ci/travis-lint.git'
 
 gem "json",               "~> 1.6"
 gem "sass",               "~> 3.1"
