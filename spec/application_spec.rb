@@ -30,11 +30,12 @@ describe Travis::WebLint::Application do
 
   describe "POST /" do
     it "redirects to validate a given repo" do
-      post "/", "repo" => "travis-ci/travis-ci"
+      slug = 'travis-ci/travis-core'
+      post "/", "repo" => slug
 
       last_response.should be_redirect
       follow_redirect!
-      last_request.url.should == "http://example.org/travis-ci/travis-ci"
+      last_request.url.should == "http://example.org/#{slug}"
     end
 
     it "validates a given .travis.yml" do
