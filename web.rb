@@ -1,6 +1,6 @@
 require 'bundler/setup'
-require 'travis/yaml'
 require 'sinatra'
+require 'travis'
 require 'slim'
 require 'gh'
 
@@ -41,8 +41,7 @@ helpers do
     halt 400, 'needs repo or yml' unless params[:repo] or params[:yml]
     branch = params[:branch] || 'master'
     params[:yml] ||= GH["/repos/#{params[:repo]}/contents/.travis.yml?ref=#{branch}"]['content'].to_s.unpack('m').first
-    @result = Travis::Yaml.parse(params[:yml])
-    @matrix = Travis::Yaml::Matrix.new(@result)
+    @result = Travis.lint(params[:yml])
     slim :result
   end
 end
@@ -51,22 +50,16 @@ __END__
 
 @@ result
 
-- if @result.nested_warnings.empty?
+- if @result.warnings.empty?
   p.result Hooray, your .travis.yml seems to be solid!
 - else
   ul.result
-    - @result.nested_warnings.each do |key, warning|
+    - @result.warnings.each do |warning|
       li
-        - if key.any?
+        - if warning.key.any?
           | in <b class="error">#{key.join('.')}</b> section:
           = " "
-        == slim('= error', {}, error: warning).gsub(/&quot;(.*?)&quot;/, '<b class="error">\1</b>')
-
-- if @matrix.size > 1
-  p.jobs It will generate #{@matrix.size} jobs:
-  ul.jobs
-    - @matrix.each do |job|
-      li = job.matrix_attributes.map { |k,v| "%s=%p" % [k,v] if v }.compact.join(', ')
+        == slim('= error', {}, error: warning.message).gsub(/&quot;(.*?)&quot;/, '<b class="error">\1</b>')
 
 @@ layout
 
