@@ -1,2 +1,2 @@
-require File.expand_path("application")
-run Travis::WebLint::Application
+require_relative './web'
+run Sinatra::Application
