@@ -57,7 +57,7 @@ __END__
     - @result.warnings.each do |warning|
       li
         - if warning.key.any?
-          | in <b class="error">#{key.join('.')}</b> section:
+          | in <b class="error">#{warning.key.join('.')}</b> section:
           = " "
         == slim('= error', {}, error: warning.message).gsub(/&quot;(.*?)&quot;/, '<b class="error">\1</b>')
 
