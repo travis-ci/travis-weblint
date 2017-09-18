@@ -68,6 +68,10 @@ html
     title Validate your .travis.yml file
     link rel="stylesheet" type="text/css" href="/style.css"
   body
+    .flash.notice
+      .flash-message
+        span.preamble Heads up
+        span This version of WebLint is deprecated. A brand new one is in the making!
     h1
       a href="/" Travis WebLint
     p.tagline
@@ -287,3 +291,20 @@ textarea
 
 .note
   margin-top: 5em
+
+.flash-message
+  display: flex
+  align-items: center
+  height: 38px
+  padding: 0 1em
+  margin: 0 0 2em
+  line-height: 1
+  font-size: 1.14rem
+
+  .preamble
+    font-weight: bold
+    padding-right: 0.5rem
+
+.notice
+  color: #cdb62c
+  background-color: #faf6d8
