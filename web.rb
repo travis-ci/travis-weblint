@@ -71,7 +71,7 @@ html
     .flash.notice
       .flash-message
         span.preamble Heads up
-        span This version of WebLint uses a deprecated parser
+        span This version of WebLint is deprecated. A brand new one is in the making!
     h1
       a href="/" Travis WebLint
     p.tagline
