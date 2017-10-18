@@ -1,5 +1,6 @@
-require "rspec/core/rake_task"
-RSpec::Core::RakeTask.new
+task :spec do
+  # it can load without error
+  require_relative './web'
+end
 
-task :default => :spec
-task :test => :spec
+task default: :spec

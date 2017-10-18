@@ -1,15 +1,6 @@
-# About Travis WebLint [![Build Status](https://secure.travis-ci.org/travis-ci/travis-weblint.png)](http://travis-ci.org/travis-ci/travis-weblint)
+travis-weblint
+==============
 
-Travis WebLint uses [travis-lint](https://github.com/travis-ci/travis-lint) to check your `.travis.yml` for you.
+travis-lint meets teh Internet
 
-
-## TODO
-
-* Let people add a SHA and/or branch to validate
-
-
-## License & Copyright
-
-Copyright 2012 (c) Travis CI Development Team.
-
-Released under the MIT license.
+to run locally, after `bundle installing` run `bundle exec rackup`
