@@ -4,10 +4,6 @@ require 'travis'
 require 'slim'
 require 'gh'
 
-configure :production do
-  GH.set token: ENV.fetch('GITHUB_TOKEN')
-end
-
 get '/' do
   slim ""
 end
@@ -16,50 +12,7 @@ get '/style.css' do
   sass :style
 end
 
-post '/' do
-  redirect to(params[:repo]) if params[:repo]
-  show_result
-end
-
-get '/gist/:id' do
-  file         = params[:file] || '.travis.yml'
-  params[:yml] = GH["/gists/#{params[:id]}"]['files'][file]['content']
-  show_result
-end
-
-get '/:owner/:name' do
-  params[:repo] = request.path_info[1..-1]
-  show_result
-end
-
-error GH::Error, NoMethodError do
-  halt 400, slim("ul.result\n  li failed to fetch <b class='error'>.travis.yml</b>")
-end
-
-helpers do
-  def show_result
-    halt 400, 'needs repo or yml' unless params[:repo] or params[:yml]
-    branch = params[:branch] || 'master'
-    params[:yml] ||= GH["/repos/#{params[:repo]}/contents/.travis.yml?ref=#{branch}"]['content'].to_s.unpack('m').first
-    @result = Travis.lint(params[:yml])
-    slim :result
-  end
-end
-
 __END__
-
-@@ result
-
-- if @result.warnings.empty?
-  p.result Hooray, your .travis.yml seems to be solid!
-- else
-  ul.result
-    - @result.warnings.each do |warning|
-      li
-        - if warning.key.any?
-          | in <b class="error">#{warning.key.join('.')}</b> section:
-          = " "
-        == slim('= error', {}, error: warning.message).gsub(/&quot;(.*?)&quot;/, '<b class="error">\1</b>')
 
 @@ layout
 
@@ -68,41 +21,19 @@ html
     title Validate your .travis.yml file
     link rel="stylesheet" type="text/css" href="/style.css"
   body
-    .flash.notice
-      .flash-message
-        span.preamble Heads up
-        span This version of WebLint is deprecated. A brand new one is in the making!
     h1
       a href="/" Travis WebLint
-    p.tagline
-      | Uses <a href="https://github.com/travis-ci/travis-yaml">travis-yaml</a> to check your .travis.yml config.
 
     == yield
 
-    form class="first" action="/" method="post" accept-charset="UTF-8"
-      label for="repo" Enter your Github repository
-      input type="text" id="repo" name="repo" maxlength="80" placeholder="travis-ci/travis-yaml" required=true value=params[:repo]
-      input type="submit" value="Validate"
-
-    form action="/" method="post" accept-charset="UTF-8" id="ymlform"
-      label for="yml" Or paste your .travis.yml
-      textarea id="yml" name="yml" maxlength="10000" autofocus=true = params[:yml]
-      input type="submit" value="Validate"
-
-    javascript:
-      var input = document.getElementById("yml");
-      var form  = document.getElementById("ymlform");
-      input.onkeydown = function(event) {
-          if ((event.metaKey || event.ctrlKey) && event.keyCode == 13) form.submit();
-      };
-
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-24868285-9', 'travis-ci.org');
-      ga('send', 'pageview');
+    p.tagline
+      | This version of WebLint is deprecated.
+      br
+      br
+      | We are working on a new yml parsing library, <a href="https://github.com/travis-ci/travis-yml">travis-yml</a>, which is slowly being rolled out on the Travis CI hosted platform. We are also working on a new WebLint tool.
+      br
+      br
+      | For more information about opting in to use `travis-yml` in your Travis builds please contact <a href="mailto:support@travis-ci.com">support@travis-ci.com</a>
 
 @@ style
 
